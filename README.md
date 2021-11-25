@@ -32,6 +32,10 @@ You can either run the application locally on any IDE preferable Intellij Idea o
 - Run below command to containerize the image
 ``docker run -e DATABASE_SERVER=jdbc:h2:mem:stock_db -dp 8080:8081 stockapi``
 
+## Log In Details
+- Username : admin
+- Password : admin_pass
+
 
 ## API Documentation
 
