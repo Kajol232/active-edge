@@ -2,8 +2,8 @@ package com.example.muhammad.stockapp.services;
 
 import com.example.muhammad.stockapp.model.Stock;
 import com.example.muhammad.stockapp.model.StockDTO;
+import com.example.muhammad.stockapp.model.UpdateStockDTO;
 import com.example.muhammad.stockapp.repositories.StockRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +11,12 @@ import java.util.Optional;
 
 @Service
 public class StockServiceImpl implements IStockService{
-    @Autowired
-    private static StockRepository stockRepository;
+    private final StockRepository stockRepository;
+
+    public StockServiceImpl(StockRepository stockRepository) {
+        this.stockRepository = stockRepository;
+    }
+
     @Override
     public List<Stock> getStocks() {
         return (List<Stock>) stockRepository.findAll();
@@ -32,26 +36,25 @@ public class StockServiceImpl implements IStockService{
     }
 
     @Override
-    public boolean updateStock(long id, double price) {
+    public boolean updateStock(long id, UpdateStockDTO stockDTO) {
         Optional<Stock> stockFromDb = stockRepository.findById(id);
         if(!stockFromDb.isPresent()){
             return false;
         }
         Stock stock = stockFromDb.get();
-        stock.setCurrent_price(price);
+        if(stockDTO.getCurrent_price() != 0){
+            stock.setCurrent_price(stockDTO.getCurrent_price());
+        }
+
+        if(stockDTO.getName() != null){
+            stock.setName(stockDTO.getName());
+        }
+
+        stockRepository.save(stock);
+
         return true;
     }
 
-    @Override
-    public boolean updateStock(long id, String name) {
-        Optional<Stock> stockFromDb = stockRepository.findById(id);
-        if(!stockFromDb.isPresent()){
-            return false;
-        }
-        Stock stock = stockFromDb.get();
-        stock.setName(name);
-        return true;
-    }
 
     @Override
     public void deleteStock(long id) {

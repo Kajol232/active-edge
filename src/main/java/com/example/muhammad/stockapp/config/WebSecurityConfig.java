@@ -20,18 +20,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("admin")
                 .password(passwordEncoder().encode("admin_pass"))
-                .roles("ADMIN")
-
-                .and()
-
-                .withUser("user")
-                .password(passwordEncoder().encode("user_pass"))
-                .roles("USER");
+                .roles("ADMIN");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/api/stocks/").permitAll()
+                .antMatchers("/api/stocks/*").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
