@@ -34,6 +34,9 @@ public class StockController {
     @PostMapping ( consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addStock(@RequestBody StockDTO stockDTO){
+        if(stockDTO == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Stock stock = stockService.addStock(stockDTO);
         return stock != null ? new ResponseEntity<>(stock, HttpStatus.CREATED) :
                 new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

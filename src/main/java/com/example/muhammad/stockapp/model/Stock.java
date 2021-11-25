@@ -1,5 +1,6 @@
 package com.example.muhammad.stockapp.model;
 
+import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,7 +15,9 @@ public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @NotNull
     private String name;
+    @NotNull
     private double current_price;
     @CreationTimestamp
     private LocalDateTime create_date;
